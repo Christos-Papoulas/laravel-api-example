@@ -7,18 +7,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserLoginTest extends TestCase
 {
-    protected $user;
-    protected $password;
-
     protected function setUp()
     {
         parent::setUp();
-        $this->password = 'test11';
-
-        $this->user = factory(\App\User::class)
-            ->create([
-                'password' => bcrypt($this->password)
-            ]);
+        $this->createUser();
     }
 
     /** @test **/

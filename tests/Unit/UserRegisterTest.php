@@ -14,12 +14,7 @@ class UserRegisterTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->password = 'Test11';
-
-        $this->user = factory(\App\User::class)
-            ->make([
-                'password' => bcrypt($this->password)
-            ]);
+        $this->makeUser();
     }
 
     /** @test **/
