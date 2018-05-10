@@ -1,43 +1,36 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UserLoginTest extends TestCase
+class UserCreateAccountTest extends TestCase
 {
     protected $user;
     protected $password;
 
-    protected function setUp()
+    /** @test **/
+    public function aUserCanCreateAnAccount()
     {
-        parent::setUp();
-        $this->password = 'test11';
+        $this->password = 'Test11';
 
         $this->user = factory(\App\User::class)
-            ->create([
+            ->make([
                 'password' => bcrypt($this->password)
             ]);
-    }
 
-    /** @test **/
-    public function aUserCanlogin()
-    {
+        $response = $this->post(
+            '/api/register',
+            ['email' => $this->user->email, 'password' => $this->password]
+        )->assertStatus(200)
+        ->assertJsonStructure(['data' => ['token']]);
+
         $response = $this->post(
             '/api/login',
             ['email' => $this->user->email, 'password' => $this->password]
         )->assertStatus(200)
         ->assertJsonStructure(['data' => ['token']]);
-    }
-
-    /** @test **/
-    public function aUserCanNotloginWithInvalidCreds()
-    {
-        $response = $this->post(
-            '/api/login',
-            ['email' => $this->user->email, 'password' => 'wrong!']
-        )->assertStatus(401)
-        ->assertJsonStructure(['error']);
     }
 }
