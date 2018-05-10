@@ -28,3 +28,8 @@ apidoc -i app/ -o public/apidoc/
 ```
 
 Visit: <URL>/apidoc/index.html
+
+
+## Feature list
+
+- Authentication: Login/Register
