@@ -20,3 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'AuthController@authenticate');
 Route::post('register', 'AuthController@register');
 Route::post('password/reset', 'AuthController@passwordReset');
+
+Route::group(['middleware' => ['jwt.auth']], function () {
+    Route::resource('profile', 'ProfileController')
+        ->except(['create', 'edit', 'index']);
+});

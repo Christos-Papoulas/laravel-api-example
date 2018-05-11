@@ -12,6 +12,7 @@ abstract class TestCase extends BaseTestCase
 
     protected $user;
     protected $password;
+    protected $token;
 
     public function createUser()
     {
@@ -21,6 +22,7 @@ abstract class TestCase extends BaseTestCase
             ->create([
                 'password' => bcrypt($this->password)
             ]);
+        return $this;
     }
 
     public function makeUser()
@@ -31,5 +33,19 @@ abstract class TestCase extends BaseTestCase
             ->make([
                 'password' => bcrypt($this->password)
             ]);
+        return $this;
+    }
+
+    public function authenticateUser()
+    {
+        $this->token = $this->post(
+            '/api/login',
+            [
+                'email' => $this->user->email,
+                'password' => $this->password,
+            ]
+        )->json()['data']['token'];
+
+        return $this->withHeader('Authorization', $this->token);
     }
 }
