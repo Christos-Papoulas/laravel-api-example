@@ -32,4 +32,4 @@ Visit: <URL>/apidoc/index.html
 
 ## Feature list
 
-- Authentication: Login/Register
+- Authentication: Login, Register, Password Reset
