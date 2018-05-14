@@ -37,4 +37,21 @@ class ProfileTest extends TestCase
             ->assertStatus(200);
         $this->assertDatabaseHas('profiles', $aProfile);
     }
+
+    /** @test **/
+    public function aUserCanNotAddHisProfileWithInvalidToken()
+    {
+        $aProfile = factory(Profile::class)
+            ->raw(['user_id' => $this->user->id]);
+
+        $this->withHeader('Authorization', 'a.b.c')
+            ->post('api/profile', $aProfile)
+            ->assertStatus(401)
+            ->assertExactJson(array(
+                "error" => "Invalid token",
+                "status" => 401
+            ));
+
+        $this->assertDatabaseMissing('profiles', $aProfile);
+    }
 }

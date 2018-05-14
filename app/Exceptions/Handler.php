@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,9 +46,26 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $e)
     {
-        return parent::render($request, $exception);
+        if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+            return response()->json(
+                array(
+                    'error' => 'Expired token',
+                    'status' => $e->getStatusCode()
+                ),
+                $e->getStatusCode()
+            );
+        } elseif ($e instanceof UnauthorizedHttpException) {
+            return response()->json(
+                array(
+                    'error' => 'Invalid token',
+                    'status' => $e->getStatusCode()
+                ),
+                $e->getStatusCode()
+            );
+        }
+        return parent::render($request, $e);
     }
 
     /**
