@@ -15,10 +15,50 @@ class ProfileController extends Controller
     use ApiResponse;
 
     /**
-     * Store a newly created resource in storage.
+     * @api {POST} /profile Update profile
+     * @apiName Update profile
+     * @apiGroup Profile
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @apiParam {String} [firstname] The first name of the user.
+     * @apiParam {String} [lastname] The lastname of the user.
+     * @apiParam {String} [nickname] The nickname of the user.
+     * @apiParam {String} [gender] male or female.
+     * @apiParam {String} [gender] male or female.
+     * @apiParam {Integer} [age] 18 <= age <= 99.
+     * @apiParam {String} [The] bio.
+     *
+     * @apiHeader (Headers) {String} Authorization The JWT authorization value.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *      "data": {
+     *          "id": 1,
+     *          "user_id": 1,
+     *          "firstname": "John",
+     *          "lastname": "Doe",
+     *          "nickname": null,
+     *          "gender": null,
+     *          "age": null,
+     *          "bio": null,
+     *          "profile_picture": null,
+     *          "cover_picture": null,
+     *          "created_at": "2018-05-14 07:22:50",
+     *          "updated_at": "2018-05-14 08:07:48"
+     *      }
+     * }
+     *
+     * @apiErrorExample {json} Error-Response:
+     *     HTTP/1.1 400 Bad Request
+     *     {
+     *         "error": {
+     *             "gender": [
+     *                 "The selected gender is invalid."
+     *             ]
+     *         },
+     *         "status": 400
+     *     }
+     *
+     * @apiError 4xx The message indicates the error.
      */
     public function store(Request $request)
     {
@@ -31,14 +71,7 @@ class ProfileController extends Controller
             'bio' => 'nullable|string',
         ]);
 
-        try {
-            $user = JWTAuth::parseToken()->authenticate();
-        } catch (TokenBlacklistedException $e) {
-            return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)
-                ->respondError('Invalid Token.');
-        } catch (JWTException $e) {
-            return $this->respondServerError('Failed to parse token.');
-        }
+        $user = JWTAuth::parseToken()->authenticate();
 
         if ($user->profile()->exists()) {
             $user->profile()->update($input);

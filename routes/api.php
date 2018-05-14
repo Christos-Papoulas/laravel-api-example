@@ -22,6 +22,5 @@ Route::post('register', 'AuthController@register');
 Route::post('password/reset', 'AuthController@passwordReset');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
-    Route::resource('profile', 'ProfileController')
-        ->except(['create', 'edit', 'index']);
+    Route::post('profile', 'ProfileController@store');
 });
