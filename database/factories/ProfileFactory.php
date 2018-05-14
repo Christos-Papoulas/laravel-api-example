@@ -8,7 +8,7 @@ $factory->define(App\Profile::class, function (Faker $faker) {
         'firstname' => $faker->firstName,
         'lastname' => $faker->lastName,
         'nickname' => $faker->name,
-        'gender' => $faker->randomElement(array('MALE','FEMALE')),
+        'gender' => $faker->randomElement(array('male','female')),
         'age' => $faker->numberBetween(18, 66),
         'bio' => $faker->paragraph,
         // profile_picture
