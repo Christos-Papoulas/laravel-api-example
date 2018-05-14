@@ -23,4 +23,5 @@ Route::post('password/reset', 'AuthController@passwordReset');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('profile', 'ProfileController@store');
+    Route::get('profile/', 'ProfileController@show');
 });

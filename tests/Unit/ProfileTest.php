@@ -36,6 +36,11 @@ class ProfileTest extends TestCase
             ->post('api/profile', $aProfile)
             ->assertStatus(200);
         $this->assertDatabaseHas('profiles', $aProfile);
+
+        $this->authenticateUser()
+            ->get('api/profile')
+            ->assertStatus(200)
+            ->assertJsonStructure(array('data' => array_keys($aProfile)));
     }
 
     /** @test **/

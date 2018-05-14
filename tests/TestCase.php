@@ -38,13 +38,15 @@ abstract class TestCase extends BaseTestCase
 
     public function authenticateUser()
     {
-        $this->token = $this->post(
-            '/api/login',
-            [
-                'email' => $this->user->email,
-                'password' => $this->password,
-            ]
-        )->json()['data']['token'];
+        if (! $this->token) {
+            $this->token = $this->post(
+                '/api/login',
+                [
+                    'email' => $this->user->email,
+                    'password' => $this->password,
+                ]
+            )->json()['data']['token'];
+        }
 
         return $this->withHeader('Authorization', $this->token);
     }

@@ -18,6 +18,7 @@ class ProfileController extends Controller
      * @api {POST} /profile Update profile
      * @apiName Update profile
      * @apiGroup Profile
+     * @apiDescription Create or Update your profile.
      *
      * @apiParam {String} [firstname] The first name of the user.
      * @apiParam {String} [lastname] The lastname of the user.
@@ -82,36 +83,38 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @api {GET} /profile Get profile
+     * @apiName Get profile
+     * @apiGroup Profile
+     * @apiDescription Returns your profile.
+     * @apiHeader (Headers) {String} Authorization The JWT authorization value.
      *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Profile $profile)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *      "data": {
+     *          "id": 1,
+     *          "user_id": 1,
+     *          "firstname": "John",
+     *          "lastname": "Doe",
+     *          "nickname": null,
+     *          "gender": null,
+     *          "age": null,
+     *          "bio": null,
+     *          "profile_picture": null,
+     *          "cover_picture": null,
+     *          "created_at": "2018-05-14 07:22:50",
+     *          "updated_at": "2018-05-14 08:07:48"
+     *      }
+     * }
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
+     * @apiError 4xx The message indicates the error.
      */
-    public function update(Request $request, Profile $profile)
+    public function show()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Profile $profile)
-    {
-        //
+        return  $this->respond(
+            JWTAuth::parseToken()
+                ->authenticate()
+                ->profile
+        );
     }
 }
