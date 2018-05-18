@@ -1,5 +1,7 @@
 # Social Network API
 
+An example of an API for a simple social network application.
+
 ## Deployment
 
 ```
