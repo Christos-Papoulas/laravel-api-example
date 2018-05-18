@@ -34,3 +34,4 @@ Visit: <URL>/apidoc/index.html
 
 - Authentication: Login, Register, Password Reset
 - User Profile
+- Friends: send/accept/decline friend request

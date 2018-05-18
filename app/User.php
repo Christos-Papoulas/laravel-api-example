@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Profile;
+use App\Traits\Friendable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    use Friendable;
 
     /**
      * The attributes that are mass assignable.

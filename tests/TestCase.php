@@ -38,6 +38,10 @@ abstract class TestCase extends BaseTestCase
 
     public function authenticateUser()
     {
+        if (! $this->user) {
+            $this->createUser();
+        }
+
         if (! $this->token) {
             $this->token = $this->post(
                 '/api/login',
