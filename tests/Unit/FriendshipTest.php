@@ -41,9 +41,9 @@ class FriendshipTest extends TestCase
             ['status' => Friend::PENDING]
         );
 
-        dd($this->authenticateUser()
-            ->post('api/friends/add/'. $friend->id));
-            // ->assertStatus(200);
+        $this->authenticateUser()
+            ->post('api/friends/add/'. $friend->id)
+            ->assertStatus(200);
 
         $this->assertDatabaseHas(
             'friend_user',
