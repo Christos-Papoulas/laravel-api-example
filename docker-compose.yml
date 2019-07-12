@@ -1,0 +1,65 @@
+version: '3'
+services:
+
+  #PHP Service
+  example-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: example-api
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: example-api
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - api-network
+
+  #Nginx Service
+  webserver-api:
+    image: nginx:alpine
+    container_name: webserver-api
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - api-network
+
+  #MySQL Service
+  dbapi:
+    image: mysql:5.7.22
+    container_name: dbapi
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: ef106b199d1743c817b1ea9d274acd6c
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbapidata:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - api-network
+
+#Docker Networks
+networks:
+  api-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbapidata:
+    driver: local
