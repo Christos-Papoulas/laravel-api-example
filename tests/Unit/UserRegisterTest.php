@@ -11,7 +11,7 @@ class UserRegisterTest extends TestCase
     protected $user;
     protected $password;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->makeUser();
